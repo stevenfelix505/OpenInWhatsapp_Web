@@ -796,24 +796,38 @@ function detectCountry(){
 }
 
 function changeCountry(){
+	// 1. Grab the clean prefix code from the hidden country wrapper element
 	let targetPref = getCleanValue(EL_COUNTRIES_INPUT.value);
 	
-	EL_PREF.value = targetPref;
+	// 2. Lock synchronization processing to block infinite input feedback loops
+	internalSyncBlock = true;
 	
+	if (!isMergedView) {
+		// If using separated fields, populate the prefix text field cleanly
+		EL_PREF.value = targetPref;
+	} else {
+		// If inputs are merged, capture any trailing raw phone number digits already typed
+		let fullVal = getCleanValue(EL_MERGED.value);
+		let currentMatchedPref = findMatchingPrefix(fullVal);
+		let existingNumberRemainder = fullVal.substring(currentMatchedPref.length);
+		
+		// Re-assemble the input field using the freshly chosen prefix code
+		EL_MERGED.value = targetPref + getCleanValue(existingNumberRemainder);
+	}
+	
+	// 3. Keep layout trackers, storage entries, and action button states aligned
 	syncToMergedField();
 	savePrefix();
 	updateStatus();
 	
+	// 4. Release synchronization lock safely
+	internalSyncBlock = false;
+	
+	// 5. Clean up search string filter values so the whole list is ready next click
 	let searchBox = eId('dropdownSearchInput');
 	if(searchBox) {
 		searchBox.value = "";
 		filterDropdownOptions();
-	}
-	
-	if (isMergedView) {
-		EL_MERGED.focus();
-	} else {
-		EL_NUMB.focus();
 	}
 }
 
