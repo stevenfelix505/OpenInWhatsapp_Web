@@ -5,15 +5,21 @@
 <title>Click to chat</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-<link rel="icon" href="favicon.ico">
+<link class="favicon" rel="icon" href="favicon.ico">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.light_green-indigo.min.css" />
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.css">
+<script src="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.js"></script>
 
 <script data-goatcounter="https://trianguloy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
 <style>
+/* Custom Green Theme Definitions Matching the Title Color */
+:root {
+	--theme-green: rgb(144, 182, 73);
+	--theme-green-hover: rgb(124, 162, 53);
+}
+
 summary {
 	cursor:pointer;
 }
@@ -33,6 +39,7 @@ body {
 	gap: 50px;
 	text-align: center;
 	width: unset;
+	font-family: Roboto, sans-serif;
 }
 body * {
 	margin: 0 auto 0 auto !important;
@@ -46,6 +53,188 @@ body:has(details:not([open])) .extraDetails {
 	display: none;
 }
 
+/* Hyperlinks Color Scheme Override */
+a {
+	color: var(--theme-green);
+	text-decoration: underline;
+}
+a:hover {
+	color: var(--theme-green-hover);
+}
+
+/* Row container forcing prefix, inputs, and + onto a single line */
+.input-row {
+	display: inline-flex !important;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 20px !important;
+	margin-bottom: 12px !important;
+	white-space: nowrap !important;
+}
+
+.input-row * {
+	margin: 0 !important;
+}
+
+/* Message block row wrapper */
+.message-row {
+	display: block !important;
+	width: 100%;
+	max-width: 21.5em;
+	margin-bottom: 20px !important;
+}
+
+/* Ensure material wrappers obey inline layout constraints */
+.mdc-text-field, .mdc-select {
+	display: inline-flex !important;
+}
+
+/* Message Column Alignment Fixes */
+#messageWrapper {
+	padding: 0 !important; /* Reset default MDC textarea inner block padding */
+	height: unset !important;
+}
+
+/* Force message cursor and text starting positions to match Prefix/Number precisely */
+#messageInput {
+	padding: 16px 16px 15px 16px !important; 
+	margin: 0 !important;
+	line-height: 1.5;
+	resize: none;
+	box-sizing: border-box;
+}
+
+/* Fix floating text position so it aligns inside the notch and does not overlap the border */
+#messageWrapper .mdc-floating-label {
+	left: 12px !important; /* Adjusted from 16px to 12px to clear right overlap */
+	top: 16px !important;
+	transform: translateY(0) scale(1) !important;
+}
+
+/* Fix floating text position when focused or filled so it seats inside the notch border without collision */
+#messageWrapper.mdc-text-field--focused .mdc-floating-label,
+#messageWrapper:has(.mdc-text-field__input:not(:placeholder-shown)) .mdc-floating-label,
+#messageWrapper .mdc-floating-label--float-above {
+	transform: translateY(-26px) translateX(-4px) scale(0.75) !important; /* Added negative translateX to slide it cleanly left out of the border wall */
+}
+
+.country-select-wrapper {
+	margin-bottom: 15px !important;
+}
+
+.border {
+	margin-top: 15px !important;
+	margin-left: 4px !important;
+	margin-right: 4px !important;
+}
+
+/* Dropdown list configuration and interaction prevention for headers */
+.mdc-select__menu .mdc-list {
+	max-height: 250px;
+	overflow-y: auto;
+}
+.mdc-list-group__subheader {
+	font-weight: bold;
+	color: rgba(0, 0, 0, 0.6);
+	padding: 8px 16px;
+	background-color: #f5f5f5;
+	pointer-events: none; 
+	user-select: none;
+}
+
+/* Search Box Sticky Styling inside Dropdown Menu */
+.select-search-container {
+	position: sticky;
+	top: 0;
+	background: white;
+	z-index: 2;
+	padding: 8px 16px;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Global MDC Component Color Modifications to match title color */
+.mdc-button--raised:not(:disabled) {
+	background-color: var(--theme-green) !important;
+}
+.mdc-button--raised:not(:disabled):hover {
+	background-color: var(--theme-green-hover) !important;
+}
+
+/* Text Field & Dropdown Menu Color Customizations */
+.mdc-text-field--focused .mdc-floating-label,
+.mdc-select--focused .mdc-floating-label {
+	color: var(--theme-green) !important;
+}
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing,
+.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__leading,
+.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__notch,
+.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__trailing {
+	border-color: rgba(0, 0, 0, 0.24);
+}
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing,
+.mdc-select--focused:not(.mdc-select--disabled) .mdc-notched-outline__leading,
+.mdc-select--focused:not(.mdc-select--disabled) .mdc-notched-outline__notch,
+.mdc-select--focused:not(.mdc-select--disabled) .mdc-notched-outline__trailing {
+	border-color: var(--theme-green) !important;
+	border-width: 2px;
+}
+.mdc-text-field__input, .mdc-select__selected-text {
+	caret-color: var(--theme-green) !important;
+}
+
+/* Dropdown Arrow Color Fixes with Hover Mechanics Added */
+.mdc-select__dropdown-icon-graphic {
+	fill: rgba(0, 0, 0, 0.54) !important; 
+	transition: fill 0.2s ease;
+}
+.mdc-select:hover .mdc-select__dropdown-icon-graphic,
+.mdc-select--focused .mdc-select__dropdown-icon-graphic {
+	fill: var(--theme-green) !important; 
+}
+
+/* Clean Row Realignment Layout Settings */
+.switch-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between; /* Splitting options cleanly left & right */
+	gap: 24px;
+	width: 100%;
+	max-width: 44em;
+	margin-top: 14px !important;
+	margin-bottom: 14px !important;
+	box-sizing: border-box;
+}
+.switch-wrapper label {
+	font-size: 15px;
+	color: rgba(0, 0, 0, 0.7);
+	cursor: pointer;
+	user-select: none;
+	text-align: left; /* Anchoring typography items to the left edge */
+	flex: 1;
+}
+.switch-wrapper .mdc-switch {
+	margin-left: auto !important; /* Forcing toggles to pull tight to the right side */
+	margin-right: 0 !important;
+}
+
+/* Modern MDC Switch Custom green theme override */
+.mdc-switch--selected .mdc-switch__track {
+	background-color: var(--theme-green) !important;
+	opacity: 0.52;
+}
+.mdc-switch--selected .mdc-switch__handle::after {
+	background-color: var(--theme-green) !important;
+}
+.mdc-switch__ripple::before, .mdc-switch__ripple::after {
+	background-color: var(--theme-green) !important;
+}
 </style>
 </head>
 
@@ -56,40 +245,193 @@ body:has(details:not([open])) .extraDetails {
 		Will probably update it if enough interest (or you can suggest changes, GitHub link below).
 	</p>
 	
-	<div><!--padding--></div>
+	<div></div>
 
 	<div style="width:100%">
 		<details id="details" ontoggle="try{ changeSetting('hideText', this.open)}catch(e){}" open>
-			<summary><h2 style="color:rgb(144,182,73);display:inline-block;vertical-align:middle">Click to chat</h2></summary>
+			<summary><h2 style="color:var(--theme-green);display:inline-block;vertical-align:middle">Click to chat</h2></summary>
 
 			<p>
 			This web uses WhatsApp public API to open a chat with any number you enter (you and that number).<br>
 			Usage: Insert the number and the <a href="https://en.wikipedia.org/wiki/List_of_country_calling_codes#Alphabetical_listing_by_country_or_region">prefix</a> with no extra characters, only numbers 0–9.<span id="countriesTxt" hidden> You can also choose from the list.</span> More info <a href="https://faq.whatsapp.com/general/chats/how-to-use-click-to-chat">here</a>.<br>
-			Example: for +44 (UK) 123 456 7890 write 44 1234567890
+			Example: for +44 (UK) 123 456 7890 write 44 1234567890
 			</p>
+			
+			<div class="switch-wrapper">
+				<label id="switchLabel">Merge prefix & number inputs</label>
+				<button id="mergeSwitch" class="mdc-switch mdc-switch--unselected" type="button" role="switch" aria-checked="false">
+					<div class="mdc-switch__track"></div>
+					<div class="mdc-switch__handle-track">
+						<div class="mdc-switch__handle">
+							<div class="mdc-switch__shadow">
+								<div class="mdc-elevation-overlay"></div>
+							</div>
+							<div class="mdc-switch__ripple"></div>
+						</div>
+					</div>
+				</button>
+			</div>
+
+			<div class="switch-wrapper">
+				<label id="removeZerosLabel">Remove leading zeros from the prefix and number</label>
+				<button id="removeZerosSwitch" class="mdc-switch mdc-switch--selected" type="button" role="switch" aria-checked="true">
+					<div class="mdc-switch__track"></div>
+					<div class="mdc-switch__handle-track">
+						<div class="mdc-switch__handle">
+							<div class="mdc-switch__shadow">
+								<div class="mdc-elevation-overlay"></div>
+							</div>
+							<div class="mdc-switch__ripple"></div>
+						</div>
+					</div>
+				</button>
+			</div>
+
+			<div class="switch-wrapper">
+				<label id="restoreSwitchLabel">Restore prefix <span id="savedPrefixData">(none)</span> when you close this website.</label>
+				<button id="restoreSwitch" class="mdc-switch mdc-switch--selected" type="button" role="switch" aria-checked="true">
+					<div class="mdc-switch__track"></div>
+					<div class="mdc-switch__handle-track">
+						<div class="mdc-switch__handle">
+							<div class="mdc-switch__shadow">
+								<div class="mdc-elevation-overlay"></div>
+							</div>
+							<div class="mdc-switch__ripple"></div>
+						</div>
+					</div>
+				</button>
+			</div>
 		</details>
 
-		<select id="countries" class="mdl-textfield__input autoWidth" style="width:auto;max-width:100%" onchange="changeCountry()" hidden>
-			<option value="" disabled>List of prefixes</option>
-			<optgroup label="Sorted By Prefix"></optgroup>
-			<optgroup label="Sorted By Country"></optgroup>
-		</select>
+		<div id="countries-wrapper" class="country-select-wrapper" hidden>
+			<div id="mdc-country-select" class="mdc-select mdc-select--outlined" style="width: 22em; max-width: 100%;">
+				<input type="hidden" name="countries-value" id="countries">
+				<div class="mdc-select__anchor" aria-labelledby="outlined-select-label">
+					<span class="mdc-notched-outline">
+						<span class="mdc-notched-outline__leading"></span>
+						<span class="mdc-notched-outline__notch">
+							<span id="outlined-select-label" class="mdc-floating-label">List of prefixes</span>
+						</span>
+						<span class="mdc-notched-outline__trailing"></span>
+					</span>
+					<span class="mdc-select__selected-text-container">
+						<span class="mdc-select__selected-text"></span>
+					</span>
+					<span class="mdc-select__dropdown-icon">
+						<svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5" focusable="false">
+							<polygon class="mdc-select__dropdown-icon-inactive" points="7 10 12 15 17 10"></polygon>
+							<polygon class="mdc-select__dropdown-icon-active" points="7 15 12 10 17 15"></polygon>
+						</svg>
+					</span>
+				</div>
 
-		<span>+</span>
-		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:5em">
-			<input class="mdl-textfield__input" type="number" id="prefix" oninput="savePrefix();detectCountry()">
-			<label class="mdl-textfield__label" for="prefix">Prefix</label>
+				<div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+					<div class="select-search-container" onkeydown="event.stopPropagation()">
+						<label id="dropdownSearchWrapper" class="mdc-text-field mdc-text-field--outlined" style="width: 100%;">
+							<span class="mdc-notched-outline">
+								<span class="mdc-notched-outline__leading"></span>
+								<span class="mdc-notched-outline__notch">
+									<span class="mdc-floating-label" id="search-label">Search prefix/country...</span>
+								</span>
+								<span class="mdc-notched-outline__trailing"></span>
+							</span>
+							<input class="mdc-text-field__input" type="text" id="dropdownSearchInput" oninput="filterDropdownOptions()" aria-labelledby="search-label">
+						</label>
+					</div>
+
+					<ul class="mdc-list" role="listbox" id="countries-list">
+						<li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true" role="option" id="emptyOptionItem">
+							<span class="mdc-list-item__ripple"></span>
+						</li>
+						<div id="group-prefix" class="mdc-list-group">
+							<h3 class="mdc-list-group__subheader">Sorted By Prefix</h3>
+							<ul class="mdc-list" role="group"></ul>
+						</div>
+						<div id="group-country" class="mdc-list-group">
+							<h3 class="mdc-list-group__subheader">Sorted By Country</h3>
+							<ul class="mdc-list" role="group"></ul>
+						</div>
+					</ul>
+				</div>
+			</div>
 		</div>
-		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:12em">
-			<input class="mdl-textfield__input" type="number" id="number" oninput="updateStatus();detectCountry()">
-			<label class="mdl-textfield__label" for="number">Number</label>
+
+		<div class="input-row">
+			<span id="plusSign" style="font-size: 24px; font-weight: 400; line-height: 56px; color: rgba(0,0,0,0.6); padding-right: 4px;">+</span>
+			
+			<label id="prefixWrapper" class="mdc-text-field mdc-text-field--outlined" style="width:7em">
+				<span class="mdc-notched-outline">
+					<span class="mdc-notched-outline__leading"></span>
+					<span class="mdc-notched-outline__notch">
+						<span class="mdc-floating-label" id="prefix-label">Prefix</span>
+					</span>
+					<span class="mdc-notched-outline__trailing"></span>
+				</span>
+				<input class="mdc-text-field__input" type="number" id="prefix" oninput="handlePrefixInput()" aria-labelledby="prefix-label">
+			</label>
+
+			<label id="numberWrapper" class="mdc-text-field mdc-text-field--outlined" style="width:14em">
+				<span class="mdc-notched-outline">
+					<span class="mdc-notched-outline__leading"></span>
+					<span class="mdc-notched-outline__notch">
+						<span class="mdc-floating-label" id="number-label">Number</span>
+					</span>
+					<span class="mdc-notched-outline__trailing"></span>
+				</span>
+				<input class="mdc-text-field__input" type="number" id="number" oninput="handleNumberInput()" aria-labelledby="number-label">
+			</label>
+
+			<label id="mergedWrapper" class="mdc-text-field mdc-text-field--outlined" style="width:21.5em; display:none !important;">
+				<span class="mdc-notched-outline">
+					<span class="mdc-notched-outline__leading"></span>
+					<span class="mdc-notched-outline__notch">
+						<span class="mdc-floating-label" id="merged-label">Prefix & Number</span>
+					</span>
+					<span class="mdc-notched-outline__trailing"></span>
+				</span>
+				<input class="mdc-text-field__input" type="number" id="mergedInput" oninput="handleMergedInput()" aria-labelledby="merged-label">
+			</label>
+		</div>
+
+		<p class="extraDetails" style="max-width: 44em; text-align: center; margin: 10px auto 15px auto !important;">
+			Use this to create a link that will open WhatsApp when clicked. You can specify a number and/or a message that will be placed on the input box (will NOT, I repeat, will NOT send the message).
+		</p>
+
+		<div class="message-row">
+			<label id="messageWrapper" class="mdc-text-field mdc-text-field--textarea mdc-text-field--outlined" style="width: 100%;">
+				<span class="mdc-notched-outline">
+					<span class="mdc-notched-outline__leading"></span>
+					<span class="mdc-notched-outline__notch">
+						<span class="mdc-floating-label" id="message-label">Message</span>
+					</span>
+					<span class="mdc-notched-outline__trailing"></span>
+				</span>
+				<textarea class="mdc-text-field__input" id="messageInput" rows="3" aria-labelledby="message-label" placeholder=" "></textarea>
+			</label>
 		</div>
 
 		<br>
 
-		<button id="openWeb" onclick="openWeb()" class="border mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Open (WhatsApp Web)</button>
-		<button id="openApp" onclick="openApp()" class="border mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Open (App)</button>
-		<button id="share" onclick="share()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored border">Share link</button>
+		<button id="openWeb" onclick="openWeb()" class="border mdc-button mdc-button--raised" data-mdc-auto-init="MDCButton">
+			<span class="mdc-button__ripple"></span>
+			<span class="mdc-button__label">Open (WhatsApp Web)</span>
+		</button>
+		<button id="openApp" onclick="openApp()" class="border mdc-button mdc-button--raised" data-mdc-auto-init="MDCButton">
+			<span class="mdc-button__ripple"></span>
+			<span class="mdc-button__label">Open (App)</span>
+		</button>
+		<button id="callPhone" onclick="callPhone()" class="border mdc-button mdc-button--raised" data-mdc-auto-init="MDCButton">
+			<span class="mdc-button__ripple"></span>
+			<span class="mdc-button__label">Call</span>
+		</button>
+		<button id="sendSMS" onclick="sendSMS()" class="border mdc-button mdc-button--raised" data-mdc-auto-init="MDCButton">
+			<span class="mdc-button__ripple"></span>
+			<span class="mdc-button__label">SMS</span>
+		</button>
+		<button id="share" onclick="share()" class="border mdc-button mdc-button--raised" data-mdc-auto-init="MDCButton">
+			<span class="mdc-button__ripple"></span>
+			<span class="mdc-button__label">Share link</span>
+		</button>
 
 	</div>
 	
@@ -101,7 +443,6 @@ body:has(details:not([open])) .extraDetails {
 
 		<p>
 
-		<!-- This code is licensed under a creative commons license. You can't remove this part. -->
 		Made by TrianguloY. (<a href="#" onclick="toggleChangelog(); return false;">V 1.8.1</a>). This page is not affiliated with WhatsApp Inc.<br>
 		<pre id="changelog" style="white-space: pre-wrap;" hidden>
 Changelog:
@@ -119,7 +460,7 @@ V 1.7
 		</pre>
 		
 		The <a href="https://github.com/TrianguloY/OpenInWhatsapp_Web" target="_blank">source code</a> is available on GitHub.<br>
-		- Uses the <a href="https://getmdl.io/index.html" target="_blank">Material Design Lite</a> library for a cleaner look.<br>
+		- Uses the <a href="https://material.io/components" target="_blank">Material Design 2</a> library for a cleaner look.<br>
 		- The prefix and toggled-title are kept local-only on your browser using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage</a>.<br>Press <a href="#" onclick="clearLocalStorage(); return false;">here</a> if you want to clear the local storage.<br>
 		- Uses also <a href="https://www.goatcounter.com/" target="_blank">GoatCounter</a> to check how popular this page is.
 		</p>
@@ -128,33 +469,51 @@ V 1.7
 
 <script>
 
-// ---------- onle-line utils ----------
+let mdcSelectInstance;
+let mdcSwitchInstance, mdcRemoveZerosSwitchInstance, mdcRestoreSwitchInstance;
+let mdcPrefInstance, mdcNumbInstance, mdcMergedInstance, mdcSearchInstance, mdcMessageInstance;
+let isMergedView = false;
+let isRemoveZerosEnabled = true; 
+let isRestoreEnabled = true;
+
+// Prevent infinite programmatic update loops between dropdown and numeric input modifications
+let internalSyncBlock = false;
+
+// ---------- one-line utils ----------
 function eId(id){ return document.getElementById(id) || document.createElement('div') }
-function reload(){ window.location.reload(false) } // (false, aka don't fetch again, because the page didn't change)
+function reload(){ window.location.reload(false) }
 
 
 // ---------- buttons ----------
 
-// 'open web' button
 function openWeb(){
-	// opens the web version
-	openLink("https://web.whatsapp.com/send?phone="+getNumber())
+	let msg = encodeURIComponent(eId('messageInput').value);
+	openLink("https://web.whatsapp.com/send?phone=" + getNumber() + (msg ? "&text=" + msg : ""));
 }
 
-// 'open app' button
+// Open via Direct Universal API Link (Mobile App Redirect Focus)
 function openApp(){
-	// opens the app version
-	openLink("https://wa.me/"+getNumber())
+	let msg = encodeURIComponent(eId('messageInput').value);
+	openLink("https://wa.me/" + getNumber() + (msg ? "?text=" + msg : ""));
 }
 
-// 'share' button
-function share(){
-	// shares the wa.me number
-	let url = "wa.me/"+getNumber()
+// Open standard hardware dialer via universal tel protocol
+function callPhone(){
+	openLink("tel:+" + getNumber())
+}
 
-	// test
+// Open native messaging interface via sms protocol
+function sendSMS(){
+	let msg = encodeURIComponent(eId('messageInput').value);
+	// standard cross-platform separator syntax compatibility handling for body
+	openLink("sms:+" + getNumber() + (msg ? "?body=" + msg : ""))
+}
+
+function share(){
+	let msg = encodeURIComponent(eId('messageInput').value);
+	let url = "wa.me/" + getNumber() + (msg ? "?text=" + msg : "");
+
 	if (navigator.share) {
-		// can share
 		navigator.share({
 			title: url,
 			text: url,
@@ -163,20 +522,34 @@ function share(){
 		.then(() => console.log('Successful share'))
 		.catch((error) => console.log('Error sharing', error))
 	}else if(copyToClipboard(url)){
-		// can copy
 		alert("Url '"+url+"' copied to clipboard")
 	}else{
-		// manual input
 		prompt("Click to chat link: (Ctrl+C to copy)", url)
 	}
 }
 
-// opens a link in a new tab
+function createMDCListItem(text, value) {
+	let li = document.createElement('li');
+	li.className = 'mdc-list-item';
+	li.setAttribute('data-value', value);
+	li.setAttribute('role', 'option');
+	
+	let ripple = document.createElement('span');
+	ripple.className = 'mdc-button__ripple';
+	
+	let textSpan = document.createElement('span');
+	textSpan.className = 'mdc-list-item__text';
+	textSpan.textContent = text;
+	
+	li.appendChild(ripple);
+	li.appendChild(textSpan);
+	return li;
+}
+
 function openLink(url){
 	window.open(url)
 }
 
-// copies the text to the clipboard
 function copyToClipboard(text){
 	let inputc = document.body.appendChild(document.createElement("input"))
 	inputc.value = text
@@ -187,53 +560,157 @@ function copyToClipboard(text){
 	return result
 }
 
-// ---------- input ----------
+// ---------- input handles & layout tracking ----------
 
 let EL_PREF = eId('prefix')
 let EL_NUMB = eId('number')
+let EL_MERGED = eId('mergedInput')
 
-// returns the current input number
-function getNumber(prefixOnly = false){
-	return EL_PREF.value + (prefixOnly ? '' : EL_NUMB.value.replace(/^0+/, ''))
+function getCleanValue(val) {
+	if (!val) return "";
+	return isRemoveZerosEnabled ? val.replace(/^0+/, '') : val;
 }
 
-// sets a new number (pref and/or number)
+function getNumber(prefixOnly = false) {
+	if (isMergedView) {
+		let fullVal = getCleanValue(EL_MERGED.value);
+		let matchedPref = findMatchingPrefix(fullVal);
+		if (prefixOnly) return matchedPref;
+		let remainder = fullVal.substring(matchedPref.length);
+		return matchedPref + getCleanValue(remainder);
+	}
+	return getCleanValue(EL_PREF.value) + (prefixOnly ? '' : getCleanValue(EL_NUMB.value));
+}
+
 function setNumber(prefix=undefined,number=undefined){
 	if(prefix != undefined) {
-		// set prexix
-		EL_PREF.value = prefix
-		EL_PREF.dispatchEvent(new Event('input'))
+		EL_PREF.value = prefix;
 	}
 	if(number != undefined) {
-		// set number
-		EL_NUMB.value = number
-		EL_NUMB.dispatchEvent(new Event('input'))
+		EL_NUMB.value = number;
 	}
+	syncToMergedField();
+	detectCountry();
+	updateStatus();
 }
 
-// updates the buttons availability
 function updateStatus(){
-	let disabled = EL_NUMB.value.replace(/^0+/, '') == ""
+	let disabled = "";
+	if (isMergedView) {
+		disabled = getCleanValue(EL_MERGED.value) == "";
+	} else {
+		disabled = getCleanValue(EL_NUMB.value) == "";
+	}
 	eId('openApp').disabled = disabled
 	eId('openWeb').disabled = disabled
+	eId('callPhone').disabled = disabled
+	eId('sendSMS').disabled = disabled
 	eId('share').disabled = disabled
+}
+
+// Prefix Matching Algorithms
+function findMatchingPrefix(stringVal) {
+	if(maxPref == 0 || !stringVal) return "";
+	let testChunk = stringVal.substring(0, maxPref);
+	while(testChunk.length > 0) {
+		if(prefs.indexOf(testChunk) != -1) return testChunk;
+		testChunk = testChunk.substring(0, testChunk.length - 1);
+	}
+	return "";
+}
+
+function handleNumberInput() {
+	let numVal = EL_NUMB.value;
+	if (numVal.length > 0) {
+		let cumulativeString = getCleanValue(EL_PREF.value) + numVal;
+		let fullDetectedPref = findMatchingPrefix(cumulativeString);
+		
+		if (fullDetectedPref.length > 0) {
+			EL_PREF.value = fullDetectedPref;
+			EL_NUMB.value = cumulativeString.substring(fullDetectedPref.length);
+		}
+	}
+	savePrefix();
+	detectCountry();
+	updateStatus();
+}
+
+function handlePrefixInput() {
+	savePrefix();
+	if (maxPref > 0) {
+		let currentPref = getCleanValue(EL_PREF.value);
+		let detected = findMatchingPrefix(currentPref);
+		if (detected && mdcSelectInstance) {
+			internalSyncBlock = true;
+			mdcSelectInstance.value = detected;
+			EL_COUNTRIES_INPUT.value = detected;
+			internalSyncBlock = false;
+		} else if (!currentPref && mdcSelectInstance) {
+			internalSyncBlock = true;
+			mdcSelectInstance.value = "";
+			EL_COUNTRIES_INPUT.value = "";
+			internalSyncBlock = false;
+		}
+	}
+	updateStatus();
+}
+
+// Handling user edits inside combined entry layout frameworks
+function handleMergedInput() {
+	let combinedVal = EL_MERGED.value;
+	let extractedPref = findMatchingPrefix(combinedVal);
+	
+	if (extractedPref.length > 0) {
+		EL_PREF.value = extractedPref;
+		EL_NUMB.value = combinedVal.substring(extractedPref.length);
+	} else {
+		EL_PREF.value = "";
+		EL_NUMB.value = combinedVal;
+	}
+	
+	savePrefix();
+	detectCountry();
+	updateStatus();
+}
+
+function syncToMergedField() {
+	EL_MERGED.value = getCleanValue(EL_PREF.value) + EL_NUMB.value;
+}
+
+function applyLayoutDomProperties() {
+	let prefixWrap = eId('prefixWrapper');
+	let numberWrap = eId('numberWrapper');
+	let mergedWrap = eId('mergedWrapper');
+
+	if (isMergedView) {
+		syncToMergedField();
+		prefixWrap.style.setProperty('display', 'none', 'important');
+		numberWrap.style.setProperty('display', 'none', 'important');
+		mergedWrap.style.setProperty('display', 'inline-flex', 'important');
+		if(mdcMergedInstance) mdcMergedInstance.layout();
+	} else {
+		prefixWrap.style.setProperty('display', 'inline-flex', 'important');
+		numberWrap.style.setProperty('display', 'inline-flex', 'important');
+		mergedWrap.style.setProperty('display', 'none', 'important');
+		if(mdcPrefInstance) mdcPrefInstance.layout();
+		if(mdcNumbInstance) mdcNumbInstance.layout();
+	}
+	updateStatus();
 }
 
 // ---------- country ----------
 
-let EL_COUNTRIES = eId('countries')
+let EL_COUNTRIES_INPUT = eId('countries')
 let COUNTRY_URL = "https://raw.githubusercontent.com/TrianguloY/OpenInWhatsapp_Translation/master/res/raw/countries_{}.txt"
 let prefs = []
 let maxPref = 0
 
-// loads the countries
 function loadCountries(){
 	Promise.all([
 		fetch(COUNTRY_URL.replace("{}","ext")).then(e => e.text()),
 		fetch(COUNTRY_URL.replace("{}","name")).then(e => e.text()),
 	]).then(data => {
 
-		// parse the data
 		let extsData = data[0].split('\n')
 		let namesData = data[1].split('\n')
 		if (namesData.length != extsData.length) throw "Invalid length"
@@ -252,46 +729,107 @@ function loadCountries(){
 			)
 		})
 
-		// populate options
+		let prefixListTarget = eId('group-prefix').querySelector('.mdc-list');
+		let countryListTarget = eId('group-country').querySelector('.mdc-list');
+
 		group(values).sort().forEach(([ext, names]) => {
 			let prefVal = ext.replaceAll(' ','')
-			EL_COUNTRIES.children[1].appendChild(new Option('+'+ext+': '+names.join(', '), prefVal))
+			prefixListTarget.appendChild(createMDCListItem('+'+ext+': '+names.join(', '), prefVal))
 
 			prefs.push(prefVal)
 			maxPref = Math.max(maxPref, prefVal.length)
 		})
 		group(values.map(a=>a.reverse())).sort().forEach(([name, exts]) => {
-			EL_COUNTRIES.children[2].appendChild(new Option(name+' (+'+exts.join(', ')+')', exts[0].replaceAll(' ','')))
+			countryListTarget.appendChild(createMDCListItem(name+' (+'+exts.join(', ')+')', exts[0].replaceAll(' ','')))
 		})
 
-		// init
+		if(eId('mdc-country-select')) {
+			mdcSelectInstance = mdc.select.MDCSelect.attachTo(eId('mdc-country-select'));
+			
+			mdcSelectInstance.listen('MDCSelect:change', function() {
+				if (!internalSyncBlock && EL_COUNTRIES_INPUT.value !== mdcSelectInstance.value) {
+					EL_COUNTRIES_INPUT.value = mdcSelectInstance.value;
+					changeCountry();
+				}
+			});
+		}
+
 		detectCountry()
-		EL_COUNTRIES.hidden = false
+		eId("countries-wrapper").hidden = false;
 		eId("countriesTxt").hidden = false;
+		
+		if(mdcSelectInstance) {
+			mdcSelectInstance.layout();
+		}
+
+		if (!isMergedView) {
+			handleNumberInput();
+		}
 
 	}).catch(console.error)
 }
 
-// detects and sets the current country from the input prefix
 function detectCountry(){
-	if(maxPref == 0) return
+	if(maxPref == 0 || internalSyncBlock) return
 
-	// iterate until find
-	let number = getNumber().substring(0,maxPref)
-	while(number.length>0){
-		if(prefs.indexOf(number) != -1) break
-		number = number.substring(0,number.length-1)
+	let number = getNumber(prefixOnly=true);
+	EL_COUNTRIES_INPUT.value = number;
+	
+	if (mdcSelectInstance) {
+		internalSyncBlock = true;
+		mdcSelectInstance.value = number;
+		internalSyncBlock = false;
 	}
-	EL_COUNTRIES.value = number
 }
 
-// changes the prefix from the selected option
 function changeCountry(){
-	setNumber(prefix=EL_COUNTRIES.value)
+	let targetPref = getCleanValue(EL_COUNTRIES_INPUT.value);
+	
+	EL_PREF.value = targetPref;
+	
+	syncToMergedField();
+	savePrefix();
+	updateStatus();
+	
+	let searchBox = eId('dropdownSearchInput');
+	if(searchBox) {
+		searchBox.value = "";
+		filterDropdownOptions();
+	}
+	
+	if (isMergedView) {
+		EL_MERGED.focus();
+	} else {
+		EL_NUMB.focus();
+	}
 }
 
-// utility to group an array of pairs from the first group
-// [ [1,2], [1,3], [4,5] ] -> [ [1,[2,3]], [4,[5]] ]
+function filterDropdownOptions() {
+	let filterQuery = eId('dropdownSearchInput').value.toLowerCase().trim();
+	let items = eId('countries-list').querySelectorAll('.mdc-list-item:not(#emptyOptionItem)');
+	
+	items.forEach(item => {
+		let itemText = item.textContent.toLowerCase();
+		let itemValue = (item.getAttribute('data-value') || '').toLowerCase();
+		
+		if (itemText.includes(filterQuery) || itemValue.includes(filterQuery)) {
+			item.style.display = 'flex';
+		} else {
+			item.style.display = 'none';
+		}
+	});
+	
+	let groups = eId('countries-list').querySelectorAll('.mdc-list-group');
+	groups.forEach(group => {
+		let dynamicItems = group.querySelectorAll('.mdc-list-item');
+		let activeCount = 0;
+		dynamicItems.forEach(i => { if(i.style.display !== 'none') activeCount++; });
+		
+		let header = group.querySelector('.mdc-list-group__subheader');
+		if(header) header.style.display = activeCount > 0 ? 'block' : 'none';
+	});
+}
+
 function group(data){
 	return Object.entries(data.reduce((group, [a, b]) => {
 			if(!(a in group)) group[a] = [];
@@ -300,31 +838,103 @@ function group(data){
 		}, {}));
 }
 
-// ---------- settings ----------
+// ---------- settings & switches ----------
 
 let KEY_PREFIX_SETTING = "setting_"
 
-// configured settings: name => lambda to apply it
 let settings = {
-	"hideText": v => eId("details").open = v !== "false"
+	"hideText": v => {
+		let isOpen = v !== "false";
+		eId("details").open = isOpen;
+		
+		// Synchronize display visibility adjustments across all target elements tied to .extraDetails
+		document.querySelectorAll('.extraDetails').forEach(el => {
+			el.style.display = isOpen ? 'block' : 'none';
+		});
+	},
+	"mergeFields": v => {
+		isMergedView = (v === "true");
+		if (mdcSwitchInstance) {
+			mdcSwitchInstance.selected = isMergedView;
+		}
+		applyLayoutDomProperties();
+	},
+	"removeZerosSetting": v => {
+		isRemoveZerosEnabled = (v !== "false"); 
+		if (mdcRemoveZerosSwitchInstance) {
+			mdcRemoveZerosSwitchInstance.selected = isRemoveZerosEnabled;
+		}
+		if (!isMergedView) {
+			handlePrefixInput();
+			handleNumberInput();
+		} else {
+			handleMergedInput();
+		}
+		updateStatus();
+	},
+	"restorePrefixSetting": v => {
+		isRestoreEnabled = (v !== "false");
+		if (mdcRestoreSwitchInstance) {
+			mdcRestoreSwitchInstance.selected = isRestoreEnabled;
+		}
+	}
 }
 
-// changes and saves a setting to a value
 function changeSetting(id, v){
 	settings[id](""+v);
 	localStorage.setItem(KEY_PREFIX_SETTING + id, v);
 }
 
-// loads all settings from storage
-function loadSettings(){
+function loadSettings() {
+	mdcPrefInstance = mdc.textField.MDCTextField.attachTo(eId('prefixWrapper'));
+	mdcNumbInstance = mdc.textField.MDCTextField.attachTo(eId('numberWrapper'));
+	mdcMergedInstance = mdc.textField.MDCTextField.attachTo(eId('mergedWrapper'));
+	mdcSearchInstance = mdc.textField.MDCTextField.attachTo(eId('dropdownSearchWrapper'));
+	mdcMessageInstance = mdc.textField.MDCTextField.attachTo(eId('messageWrapper'));
+
+	if (eId('mergeSwitch')) {
+		mdcSwitchInstance = mdc.switchControl.MDCSwitch.attachTo(eId('mergeSwitch'));
+		eId('mergeSwitch').addEventListener('click', function() {
+			changeSetting('mergeFields', mdcSwitchInstance.selected);
+		});
+		eId('switchLabel').addEventListener('click', function() {
+			mdcSwitchInstance.selected = !mdcSwitchInstance.selected;
+			changeSetting('mergeFields', mdcSwitchInstance.selected);
+		});
+	}
+
+	if (eId('removeZerosSwitch')) {
+		mdcRemoveZerosSwitchInstance = mdc.switchControl.MDCSwitch.attachTo(eId('removeZerosSwitch'));
+		eId('removeZerosSwitch').addEventListener('click', function() {
+			changeSetting('removeZerosSetting', mdcRemoveZerosSwitchInstance.selected);
+		});
+		eId('removeZerosLabel').addEventListener('click', function() {
+			mdcRemoveZerosSwitchInstance.selected = !mdcRemoveZerosSwitchInstance.selected;
+			changeSetting('removeZerosSetting', mdcRemoveZerosSwitchInstance.selected);
+		});
+	}
+
+	if (eId('restoreSwitch')) {
+		mdcRestoreSwitchInstance = mdc.switchControl.MDCSwitch.attachTo(eId('restoreSwitch'));
+		eId('restoreSwitch').addEventListener('click', function() {
+			changeSetting('restorePrefixSetting', mdcRestoreSwitchInstance.selected);
+		});
+		eId('restoreSwitchLabel').addEventListener('click', function() {
+			mdcRestoreSwitchInstance.selected = !mdcRestoreSwitchInstance.selected;
+			changeSetting('restorePrefixSetting', mdcRestoreSwitchInstance.selected);
+		});
+	}
+
 	for(setting in settings){
-		settings[setting](localStorage.getItem(KEY_PREFIX_SETTING + setting));
+		let storedVal = localStorage.getItem(KEY_PREFIX_SETTING + setting);
+		if(storedVal !== null) {
+			settings[setting](storedVal);
+		}
 	}
 }
 
 // ---------- changelog ----------
 
-// toggles the changelog visibility
 function toggleChangelog(){
 	eId('changelog').hidden = !eId('changelog').hidden
 }
@@ -333,19 +943,44 @@ function toggleChangelog(){
 
 let KEY_PREF = "prefix"
 
-// saves the input prefix into storage
 function savePrefix(){
-	localStorage.setItem(KEY_PREF, getNumber(prefixOnly=true))
+	let currentPref = getNumber(prefixOnly=true);
+	localStorage.setItem(KEY_PREF, currentPref);
+	
+	let dataDisplay = eId('savedPrefixData');
+	if (currentPref && currentPref.trim() !== "") {
+		dataDisplay.textContent = "(+" + currentPref + ")";
+		dataDisplay.style.color = "var(--theme-green)";
+		dataDisplay.style.fontWeight = "bold";
+	} else {
+		dataDisplay.textContent = "(none)";
+		dataDisplay.style.color = "rgba(0, 0, 0, 0.7)";
+		dataDisplay.style.fontWeight = "normal";
+	}
 }
 
-// loads the input prefix from storage
 function restorePrefix(){
-	setNumber(prefix=localStorage.getItem(KEY_PREF))
+	let storedRestoreOption = localStorage.getItem(KEY_PREFIX_SETTING + "restorePrefixSetting");
+	if (storedRestoreOption === "false") {
+		let saved = localStorage.getItem(KEY_PREF);
+		let dataDisplay = eId('savedPrefixData');
+		if (saved && saved.trim() !== "") {
+			dataDisplay.textContent = "(+" + saved + ")";
+			dataDisplay.style.color = "var(--theme-green)";
+			dataDisplay.style.fontWeight = "bold";
+		}
+		return;
+	}
+	
+	let saved = localStorage.getItem(KEY_PREF);
+	if(saved) {
+		EL_PREF.value = getCleanValue(saved);
+	}
+	savePrefix(); 
 }
 
 // ---------- clear preferences ----------
 
-// clears the localStorage, notifies the user and reloads the page
 function clearLocalStorage(){
 	if(confirm("Do you want to clear the localStorage? (saved prefix and toggled-title).\nThe page will refresh.")){
 		localStorage.clear()
@@ -355,12 +990,10 @@ function clearLocalStorage(){
 
 // ---------- initialization ----------
 
-//window.onload = function(){
+try{ loadSettings()  }catch(e){console.log(e)}
 try{ restorePrefix() }catch(e){console.log(e)}
 try{ updateStatus()  }catch(e){console.log(e)}
 try{ loadCountries() }catch(e){console.log(e)}
-try{ loadSettings()  }catch(e){console.log(e)}
-//}
 
 </script>
 
