@@ -745,38 +745,39 @@ function loadCountries(){
 			)
 		})
 
+		// Locate target list nodes explicitly
 		let prefixListTarget = eId('group-prefix').querySelector('.mdc-list');
 		let countryListTarget = eId('group-country').querySelector('.mdc-list');
 
 		group(values).sort().forEach(([ext, names]) => {
-			let prefVal = ext.replaceAll(' ','')
-			prefixListTarget.appendChild(createMDCListItem('+'+ext+': '+names.join(', '), prefVal))
-
-			prefs.push(prefVal)
-			maxPref = Math.max(maxPref, prefVal.length)
-		})
-		group(values.map(a=>a.reverse())).sort().forEach(([name, exts]) => {
-			countryListTarget.appendChild(createMDCListItem(name+' (+'+exts.join(', ')+')', exts[0].replaceAll(' ','')))
-		})
-
-		if(eId('mdc-country-select')) {
-			mdcSelectInstance = mdc.select.MDCSelect.attachTo(eId('mdc-country-select'));
+			let prefVal = ext.replaceAll(' ','');
+			let item = createMDCListItem('+'+ext+': '+names.join(', '), prefVal);
 			
-			mdcSelectInstance.listen('MDCSelect:change', function() {
-				if (!internalSyncBlock && EL_COUNTRIES_INPUT.value !== mdcSelectInstance.value) {
-					EL_COUNTRIES_INPUT.value = mdcSelectInstance.value;
-					changeCountry();
-				}
-			});
+			// Click binding: selection captures data value directly and shuts dialog
+			item.onclick = function() { selectCountryValue(prefVal, '+'+ext+': '+names.join(', ')); };
+			prefixListTarget.appendChild(item);
+
+			prefs.push(prefVal);
+			maxPref = Math.max(maxPref, prefVal.length);
+		});
+		
+		group(values.map(a=>a.reverse())).sort().forEach(([name, exts]) => {
+			let prefVal = exts[0].replaceAll(' ','');
+			let displayName = name+' (+'+exts.join(', ')+')';
+			let item = createMDCListItem(displayName, prefVal);
+			
+			item.onclick = function() { selectCountryValue(prefVal, displayName); };
+			countryListTarget.appendChild(item);
+		});
+
+		// Attach Material Component initialization hook cleanly to the modal DOM surface
+		if (eId('country-dialog')) {
+			mdcDialogInstance = mdc.dialog.MDCDialog.attachTo(eId('country-dialog'));
 		}
 
-		detectCountry()
+		detectCountry();
 		eId("countries-wrapper").hidden = false;
 		eId("countriesTxt").hidden = false;
-		
-		if(mdcSelectInstance) {
-			mdcSelectInstance.layout();
-		}
 
 		if (!isMergedView) {
 			handleNumberInput();
