@@ -864,11 +864,14 @@ let settings = {
 		if (mdcRemoveZerosSwitchInstance) {
 			mdcRemoveZerosSwitchInstance.selected = isRemoveZerosEnabled;
 		}
-		if (!isMergedView) {
-			handlePrefixInput();
-			handleNumberInput();
-		} else {
-			handleMergedInput();
+		// ONLY fire heavy parsing handles if the user has already typed something
+		if (EL_PREF.value || EL_NUMB.value || EL_MERGED.value) {
+			if (!isMergedView) {
+				handlePrefixInput();
+				handleNumberInput();
+			} else {
+				handleMergedInput();
+			}
 		}
 		updateStatus();
 	},
@@ -990,10 +993,27 @@ function clearLocalStorage(){
 
 // ---------- initialization ----------
 
-try{ loadSettings()  }catch(e){console.log(e)}
-try{ restorePrefix() }catch(e){console.log(e)}
-try{ updateStatus()  }catch(e){console.log(e)}
-try{ loadCountries() }catch(e){console.log(e)}
+// Global initialization block wrapped cleanly to ensure 
+// data loading happens completely before input event loops trigger.
+try { 
+    // 1. First, attach instances and recover switch states without firing inputs
+    loadSettings(); 
+} catch(e) { console.log("Settings init error:", e); }
+
+try { 
+    // 2. Next, immediately pull the saved prefix data into the text fields
+    restorePrefix(); 
+} catch(e) { console.log("Prefix restore error:", e); }
+
+try { 
+    // 3. Now that data is fully populated, update the button disable/enable states
+    updateStatus();  
+} catch(e) { console.log("Status update error:", e); }
+
+try { 
+    // 4. Finally, fetch global country records safely
+    loadCountries(); 
+} catch(e) { console.log("Country fetch error:", e); }
 
 </script>
 
