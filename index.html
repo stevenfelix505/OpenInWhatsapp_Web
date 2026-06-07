@@ -937,6 +937,10 @@ function loadSettings() {
 	mdcMergedInstance = mdc.textField.MDCTextField.attachTo(eId('mergedWrapper'));
 	mdcSearchInstance = mdc.textField.MDCTextField.attachTo(eId('dropdownSearchWrapper'));
 	mdcMessageInstance = mdc.textField.MDCTextField.attachTo(eId('messageWrapper'));
+	// This styles the new trigger box look like a proper Material field
+	if (eId('mdc-country-trigger')) {
+		mdc.textField.MDCTextField.attachTo(eId('mdc-country-trigger'));
+	}
 	// Listen for typing changes inside the message box
 	eId('messageInput').addEventListener('input', updateStatus);
 	if (eId('mergeSwitch')) {
