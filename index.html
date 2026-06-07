@@ -785,7 +785,24 @@ function loadCountries(){
 
 	}).catch(console.error)
 }
+	
+let mdcDialogInstance; // This global variable replaces mdcSelectInstance
 
+function openCountryDialog() {
+	if (mdcDialogInstance) {
+		mdcDialogInstance.open();
+		// Automatically focus on the search input box after it opens
+		setTimeout(() => { 
+			let searchInput = eId('dropdownSearchInput');
+			if(searchInput) searchInput.focus(); 
+		}, 150); 
+	}
+}
+
+function closeCountryDialog() {
+	if (mdcDialogInstance) mdcDialogInstance.close();
+}
+	
 function selectCountryValue(prefixValue, displayLabel) {
 	// 1. Visually populate the display anchor element box
 	EL_COUNTRIES_INPUT.value = displayLabel;
