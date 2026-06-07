@@ -488,13 +488,17 @@ function reload(){ window.location.reload(false) }
 
 function openWeb(){
 	let msg = encodeURIComponent(eId('messageInput').value);
-	openLink("https://web.whatsapp.com/send?phone=" + getNumber() + (msg ? "&text=" + msg : ""));
+	let phone = getNumber();
+	// If phone is blank, don't pass the parameter string to avoid API confusion
+	let url = "https://web.whatsapp.com/send?" + (phone ? "phone=" + phone : "") + (msg ? (phone ? "&text=" : "text=") + msg : "");
+	openLink(url);
 }
 
-// Open via Direct Universal API Link (Mobile App Redirect Focus)
 function openApp(){
 	let msg = encodeURIComponent(eId('messageInput').value);
-	openLink("https://wa.me/" + getNumber() + (msg ? "?text=" + msg : ""));
+	let phone = getNumber();
+	let url = "https://wa.me/" + (phone ? phone : "") + (msg ? "?text=" + msg : "");
+	openLink(url);
 }
 
 // Open standard hardware dialer via universal tel protocol
@@ -894,7 +898,8 @@ function loadSettings() {
 	mdcMergedInstance = mdc.textField.MDCTextField.attachTo(eId('mergedWrapper'));
 	mdcSearchInstance = mdc.textField.MDCTextField.attachTo(eId('dropdownSearchWrapper'));
 	mdcMessageInstance = mdc.textField.MDCTextField.attachTo(eId('messageWrapper'));
-
+	// Listen for typing changes inside the message box
+	eId('messageInput').addEventListener('input', updateStatus);
 	if (eId('mergeSwitch')) {
 		mdcSwitchInstance = mdc.switchControl.MDCSwitch.attachTo(eId('mergeSwitch'));
 		eId('mergeSwitch').addEventListener('click', function() {
