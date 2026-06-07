@@ -599,17 +599,26 @@ function setNumber(prefix=undefined,number=undefined){
 }
 
 function updateStatus(){
-	let disabled = "";
+	let isNumberEmpty = "";
 	if (isMergedView) {
-		disabled = getCleanValue(EL_MERGED.value) == "";
+		isNumberEmpty = getCleanValue(EL_MERGED.value) == "";
 	} else {
-		disabled = getCleanValue(EL_NUMB.value) == "";
+		isNumberEmpty = getCleanValue(EL_NUMB.value) == "";
 	}
-	eId('openApp').disabled = disabled
-	eId('openWeb').disabled = disabled
-	eId('callPhone').disabled = disabled
-	eId('sendSMS').disabled = disabled
-	eId('share').disabled = disabled
+	
+	// Check if the message field has any text typed into it
+	let isMessageEmpty = eId('messageInput').value.trim() === "";
+
+	// Rule 1: Call button STRICTLY requires a phone number layout
+	eId('callPhone').disabled = isNumberEmpty;
+
+	// Rule 2: Web, App, SMS, and Share are allowed if there's a number OR a message!
+	let disableTextActions = isNumberEmpty && isMessageEmpty;
+	
+	eId('openApp').disabled = disableTextActions;
+	eId('openWeb').disabled = disableTextActions;
+	eId('sendSMS').disabled = disableTextActions;
+	eId('share').disabled = disableTextActions;
 }
 
 // Prefix Matching Algorithms
