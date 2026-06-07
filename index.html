@@ -303,30 +303,26 @@ a:hover {
 			</div>
 		</details>
 
-		<div id="countries-wrapper" class="country-select-wrapper" hidden>
-			<div id="mdc-country-select" class="mdc-select mdc-select--outlined" style="width: 22em; max-width: 100%;">
-				<input type="hidden" name="countries-value" id="countries">
-				<div class="mdc-select__anchor" aria-labelledby="outlined-select-label">
-					<span class="mdc-notched-outline">
-						<span class="mdc-notched-outline__leading"></span>
-						<span class="mdc-notched-outline__notch">
-							<span id="outlined-select-label" class="mdc-floating-label">List of prefixes</span>
-						</span>
-						<span class="mdc-notched-outline__trailing"></span>
+	<div id="countries-wrapper" class="country-select-wrapper" hidden>
+			<div id="mdc-country-trigger" class="mdc-text-field mdc-text-field--outlined" style="width: 22em; max-width: 100%; cursor: pointer;" onclick="openCountryDialog()">
+				<span class="mdc-notched-outline">
+					<span class="mdc-notched-outline__leading"></span>
+					<span class="mdc-notched-outline__notch">
+						<span id="outlined-select-label" class="mdc-floating-label mdc-floating-label--float-above">List of prefixes</span>
 					</span>
-					<span class="mdc-select__selected-text-container">
-						<span class="mdc-select__selected-text"></span>
-					</span>
-					<span class="mdc-select__dropdown-icon">
-						<svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5" focusable="false">
-							<polygon class="mdc-select__dropdown-icon-inactive" points="7 10 12 15 17 10"></polygon>
-							<polygon class="mdc-select__dropdown-icon-active" points="7 15 12 10 17 15"></polygon>
-						</svg>
-					</span>
-				</div>
+					<span class="mdc-notched-outline__trailing"></span>
+				</span>
+				<input class="mdc-text-field__input" type="text" id="countries" readonly style="pointer-events: none; cursor: pointer;">
+				<span class="mdc-text-field__icon mdc-text-field__icon--trailing" style="padding-top:14px; color:rgba(0,0,0,0.54);">▼</span>
+			</div>
+		</div>
 
-				<div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
-					<div class="select-search-container" onkeydown="event.stopPropagation()">
+		<div id="country-dialog" class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-content">
+			<div class="mdc-dialog__container">
+				<div class="mdc-dialog__surface" style="max-width: 500px; width: 90%; border-radius: 8px;">
+					<h2 class="mdc-dialog__title" id="dialog-title" style="padding: 16px 24px 8px 24px; font-size: 20px;">Select Country Prefix</h2>
+					
+					<div class="select-search-container" style="padding: 8px 24px; position: sticky; top: 0; background: #fff; z-index: 3;">
 						<label id="dropdownSearchWrapper" class="mdc-text-field mdc-text-field--outlined" style="width: 100%;">
 							<span class="mdc-notched-outline">
 								<span class="mdc-notched-outline__leading"></span>
@@ -339,21 +335,28 @@ a:hover {
 						</label>
 					</div>
 
-					<ul class="mdc-list" role="listbox" id="countries-list">
-						<li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true" role="option" id="emptyOptionItem">
-							<span class="mdc-list-item__ripple"></span>
-						</li>
-						<div id="group-prefix" class="mdc-list-group">
-							<h3 class="mdc-list-group__subheader">Sorted By Prefix</h3>
-							<ul class="mdc-list" role="group"></ul>
-						</div>
-						<div id="group-country" class="mdc-list-group">
-							<h3 class="mdc-list-group__subheader">Sorted By Country</h3>
-							<ul class="mdc-list" role="group"></ul>
-						</div>
-					</ul>
+					<div class="mdc-dialog__content" id="dialog-content" style="padding: 0; max-height: 300px; overflow-y: auto;">
+						<ul class="mdc-list" id="countries-list" style="padding: 0;">
+							<div id="group-prefix" class="mdc-list-group">
+								<h3 class="mdc-list-group__subheader" style="position: sticky; top: 0; z-index: 2; background: #f5f5f5;">Sorted By Prefix</h3>
+								<ul class="mdc-list" role="group" style="padding: 0;"></ul>
+							</div>
+							<div id="group-country" class="mdc-list-group">
+								<h3 class="mdc-list-group__subheader" style="position: sticky; top: 0; z-index: 2; background: #f5f5f5;">Sorted By Country</h3>
+								<ul class="mdc-list" role="group" style="padding: 0;"></ul>
+							</div>
+						</ul>
+					</div>
+
+					<footer class="mdc-dialog__actions" style="padding: 8px 16px;">
+						<button type="button" class="mdc-button mdc-dialog__button" onclick="closeCountryDialog()" style="color: var(--theme-green);">
+							<span class="mdc-button__label">Cancel</span>
+						</button>
+					</footer>
 				</div>
 			</div>
+			<div class="mdc-dialog__scrim" onclick="closeCountryDialog()"></div>
+		</div>
 		</div>
 
 		<div class="input-row">
