@@ -698,6 +698,7 @@ function handleNumberInput() {
 
 function handlePrefixInput() {
 	savePrefix();
+	detectCountry();
 	if (maxPref > 0) {
 		let currentPref = getCleanValue(EL_PREF.value);
 		let detected = findMatchingPrefix(currentPref);
