@@ -62,6 +62,29 @@ a:hover {
 	color: var(--theme-green-hover);
 }
 
+/* Prevent the new trigger wrapper from inheriting the universal body margin breakages */
+#mdc-country-trigger {
+	margin-top: 0 !important;
+	margin-bottom: 15px !important;
+	display: inline-flex !important;
+}
+
+/* Ensure the text inputs inside the row don't pick up conflicting block margins */
+.input-row .mdc-text-field {
+	margin: 0 !important;
+}
+
+/* Fix for Material Design outline notches so text alignments match across all inputs */
+.mdc-notched-outline__notch {
+	border-left: none !important;
+	border-right: none !important;
+}
+
+/* Ensure consistent field layout box height metrics */
+.mdc-text-field:not(.mdc-text-field--textarea) {
+	height: 56px !important;
+}
+
 /* Row container forcing prefix, inputs, and + onto a single line */
 .input-row {
 	display: inline-flex !important;
