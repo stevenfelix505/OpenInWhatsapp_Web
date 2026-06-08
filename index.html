@@ -850,12 +850,9 @@ function closeCountryDialog() {
 }
 	
 function selectCountryValue(prefixValue, displayLabel) {
-	// 1. Visually populate the display anchor element box
 	EL_COUNTRIES_INPUT.value = displayLabel;
 	
-	// 2. Safely capture settings updates under internal protection locks
 	internalSyncBlock = true;
-	
 	if (!isMergedView) {
 		EL_PREF.value = prefixValue;
 	} else {
@@ -871,8 +868,17 @@ function selectCountryValue(prefixValue, displayLabel) {
 	
 	internalSyncBlock = false;
 	closeCountryDialog();
+
+	// FORCE LABEL TO FLOAT UP AND OPEN NOTCH SPACE FOR CHOSEN SELECTION
+	let trigger = eId('mdc-country-trigger');
+	if (trigger) {
+		trigger.classList.add('mdc-text-field--label-float-above');
+		let label = trigger.querySelector('.mdc-floating-label');
+		let notch = trigger.querySelector('.mdc-notched-outline');
+		if (label) label.classList.add('mdc-floating-label--float-above');
+		if (notch) notch.classList.add('mdc-notched-outline--notched');
+	}
 	
-	// 6. Reset search parameters gracefully
 	let searchBox = eId('dropdownSearchInput');
 	if (searchBox) {
 		searchBox.value = "";
@@ -883,41 +889,46 @@ function selectCountryValue(prefixValue, displayLabel) {
 function detectCountry() {
 	if (maxPref == 0 || internalSyncBlock) return;
 
-	// 1. Get the current active prefix digits typed by the user
 	let currentActivePref = getNumber(prefixOnly=true);
+	let trigger = eId('mdc-country-trigger');
 	
-	// If fields are blank or no prefix exists yet, reset the trigger layout text box
+	// Case A: No prefix chosen or text fields are completely blank
 	if (!currentActivePref) {
 		EL_COUNTRIES_INPUT.value = "";
+		
+		// STRIP FLOATING CLASSES SO TEXT LABEL FALLS BACK AND GROWS LARGER
+		if (trigger) {
+			trigger.classList.remove('mdc-text-field--label-float-above');
+			let label = trigger.querySelector('.mdc-floating-label');
+			let notch = trigger.querySelector('.mdc-notched-outline');
+			if (label) label.classList.remove('mdc-floating-label--float-above');
+			if (notch) notch.classList.remove('mdc-notched-outline--notched');
+		}
 		return;
 	}
 
-	// 2. Scan your loaded data records to find a matching country definition label
 	let foundLabel = "";
-	
-	// We check group-country list text items dynamically since they house clean country-by-prefix labels
 	let countryItems = eId('group-country').querySelectorAll('.mdc-list-item');
 	for (let i = 0; i < countryItems.length; i++) {
-		let itemValue = countryItems[i].getAttribute('data-value');
-		if (itemValue === currentActivePref) {
-			// Pull out the clean inner text (e.g., "United Kingdom (+44)")
+		if (countryItems[i].getAttribute('data-value') === currentActivePref) {
 			foundLabel = countryItems[i].textContent.trim();
 			break;
 		}
 	}
 
-	// 3. Update the display box instantly with the proper human-readable text appearance
 	if (foundLabel) {
 		EL_COUNTRIES_INPUT.value = "Active: " + foundLabel;
-		
-		// Optional layout feature: floats the text field label line upward cleanly
-		let triggerLabel = eId('mdc-country-trigger').querySelector('.mdc-floating-label');
-		if (triggerLabel) {
-			triggerLabel.classList.add('mdc-floating-label--float-above');
-		}
 	} else {
-		// If the user types a prefix number that isn't recognized in the data lists yet
 		EL_COUNTRIES_INPUT.value = "Active: +" + currentActivePref;
+	}
+
+	// Case B: Data exists inside, trigger the floating animation up and make text smaller
+	if (trigger) {
+		trigger.classList.add('mdc-text-field--label-float-above');
+		let label = trigger.querySelector('.mdc-floating-label');
+		let notch = trigger.querySelector('.mdc-notched-outline');
+		if (label) label.classList.add('mdc-floating-label--float-above');
+		if (notch) notch.classList.add('mdc-notched-outline--notched');
 	}
 }
 
