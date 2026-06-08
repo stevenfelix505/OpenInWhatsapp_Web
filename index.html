@@ -35,12 +35,15 @@ summary {
 body {
 	display: flex;
 	flex-flow: column;
-	justify-content: space-between;
-	gap: 50px;
+	align-items: center;      /* Keeps the main vertical column perfectly centered */
+	justify-content: flex-start; /* Groups items close together instead of throwing them to edges */
+	gap: 16px;                /* Drastically reduces the massive 50px void to a tight 16px split */
 	text-align: center;
 	width: unset;
 	font-family: Roboto, sans-serif;
+	padding: 20px;            /* Adds a comfortable window buffer framing your app layout */
 }
+
 body * {
 	margin: 0 auto 0 auto !important;
 }
@@ -85,20 +88,31 @@ a:hover {
 	height: 56px !important;
 }
 
-/* Row container forcing prefix, inputs, and + onto a single line */
+/* Fixes individual row layouts so elements group tightly sideways */
 .input-row {
 	display: inline-flex !important;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	gap: 8px;
-	margin-top: 20px !important;
-	margin-bottom: 12px !important;
+	gap: 4px !important;      /* Tightly nests the + symbol right against inputs */
+	margin-top: 12px !important;
+	margin-bottom: 8px !important;
 	white-space: nowrap !important;
 }
 
 .input-row * {
 	margin: 0 !important;
+}
+
+/* Regulates your button row clustering */
+.button-row {
+	display: flex !important;
+	flex-flow: row wrap;      /* Allows clean side-by-side positioning with wrap protection */
+	justify-content: center;
+	align-items: center;
+	gap: 8px !important;      /* Pulls distant action buttons close together */
+	max-width: 24em;          /* Restricts row breakout lengths */
+	margin: 0 auto !important;
 }
 
 /* Message block row wrapper */
@@ -147,10 +161,9 @@ a:hover {
 	margin-bottom: 15px !important;
 }
 
+/* Cleans up individual action button properties */
 .border {
-	margin-top: 15px !important;
-	margin-left: 4px !important;
-	margin-right: 4px !important;
+	margin: 0 !important;     /* Discharges conflicting margin gaps */
 }
 
 /* Clean block configuration protecting core action buttons layout */
